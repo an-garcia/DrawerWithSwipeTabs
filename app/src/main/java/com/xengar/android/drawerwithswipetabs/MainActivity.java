@@ -15,6 +15,7 @@
  */
 package com.xengar.android.drawerwithswipetabs;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -98,6 +99,12 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_tab_activity) {
+            // Launch activity
+            Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
             return true;
         }
 
