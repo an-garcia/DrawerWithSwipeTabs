@@ -15,6 +15,7 @@
  */
 package com.xengar.android.drawerwithswipetabs;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     ImportFragment.OnFragmentInteractionListener,
                     GalleryFragment.OnFragmentInteractionListener{
+
+    public static final String SHARED_PREF_NAME = "com.xengar.android.drawerwithswipetabs";
+    public static final String PAGE = "page";
 
     private Toolbar toolbar = null;
     private NavigationView navigationView = null;
@@ -77,14 +81,6 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        //// Set the initial fragment
-        ImportFragment fragment = new ImportFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-
         fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -96,6 +92,11 @@ public class MainActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        //// Set the initial fragment
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        int pageId = prefs.getInt(PAGE, R.id.nav_camera);
+        showPage(pageId);
     }
 
     @Override
@@ -136,45 +137,70 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            ImportFragment fragment = new ImportFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.commit();
-            tabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
-            fragmentLayout.setVisibility(View.VISIBLE);
-
-        } else if (id == R.id.nav_gallery) {
-
-            GalleryFragment fragment = new GalleryFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.commit();
-            tabLayout.setVisibility(View.GONE);
-            mViewPager.setVisibility(View.GONE);
-            fragmentLayout.setVisibility(View.VISIBLE);
-
-        } else if (id == R.id.nav_slideshow) {
-
-            fragmentLayout.setVisibility(View.GONE);
-            tabLayout.setVisibility(View.VISIBLE);
-            mViewPager.setVisibility(View.VISIBLE);
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+        showPage(id);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Show the correct page
+     * @param pageId
+     */
+    private void showPage(int pageId){
+        switch (pageId){
+            case R.id.nav_camera:
+                // Handle the camera action
+                ImportFragment fragment = new ImportFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.commit();
+                tabLayout.setVisibility(View.GONE);
+                mViewPager.setVisibility(View.GONE);
+                fragmentLayout.setVisibility(View.VISIBLE);
+                saveIntToPreferences(PAGE, R.id.nav_camera);
+                break;
+
+            case R.id.nav_gallery:
+                GalleryFragment fragmentG = new GalleryFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransactionG =
+                        getSupportFragmentManager().beginTransaction();
+                fragmentTransactionG.replace(R.id.fragment_container, fragmentG);
+                fragmentTransactionG.commit();
+                tabLayout.setVisibility(View.GONE);
+                mViewPager.setVisibility(View.GONE);
+                fragmentLayout.setVisibility(View.VISIBLE);
+                saveIntToPreferences(PAGE, R.id.nav_gallery);
+                break;
+
+            case R.id.nav_slideshow:
+                fragmentLayout.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.VISIBLE);
+                saveIntToPreferences(PAGE, R.id.nav_slideshow);
+                break;
+
+            case R.id.nav_manage:
+                break;
+            case R.id.nav_share:
+                break;
+            case R.id.nav_send:
+                break;
+        }
+    }
+
+    /**
+     * Saves the variable into Preferences.
+     * @param name
+     * @param value
+     */
+    private void saveIntToPreferences(final String name, final int value) {
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        SharedPreferences.Editor e = prefs.edit();
+        e.putInt(name, value);
+        e.commit();
     }
 
 
