@@ -1,9 +1,9 @@
 Drawer with Swipe Tabs
 ======================
 
-![alt tag](https://github.com/an-garcia/DrawerWithSwipeTabs/blob/master/readmeImages/Screenshot_1485882706.png)
-![alt tag](https://github.com/an-garcia/DrawerWithSwipeTabs/blob/master/readmeImages/Screenshot_1485882724.png)
-![alt tag](https://github.com/an-garcia/DrawerWithSwipeTabs/blob/master/readmeImages/Screenshot_1485882651.png)
+![Scheme](/readmeImages/Screenshot_1485882706.png)
+![Scheme](/readmeImages/Screenshot_1485882724.png)
+![Scheme](/readmeImages/Screenshot_1485882651.png)
 
 Android sample application to learn how to mix together sliding tabs and navigation drawer in the same activity.
 Concept described in [Material Design - Side nav and tab combinations](https://material.io/guidelines/patterns/navigation.html#navigation-combined-patterns).
